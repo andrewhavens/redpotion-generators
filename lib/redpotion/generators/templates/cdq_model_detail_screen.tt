@@ -1,0 +1,35 @@
+class <%= model_name.camelize %>DetailScreen < PM::Screen
+  title "<%= model_name.titleize %>"
+  stylesheet <%= model_name.camelize %>DetailScreenStylesheet
+
+  attr_accessor :<%= model_name.underscore %>
+
+  def on_load
+    set_nav_bar_button :right, title: "Edit", action: :edit_<%= model_name.underscore %>
+    <%- model_attributes.each do |attr, type| -%>
+    append(UILabel, :<%= attr %>).data("<%= attr.titleize %>: #{<%= model_name %>.<%= attr %>}")
+    <%- end -%>
+  end
+
+  def edit_<%= model_name.underscore %>
+    open Edit<%= model_name.camelize %>Screen.new(<%= model_name.underscore %>: <%= model_name.underscore %>)
+  end
+
+  # You don't have to reapply styles to all UIViews. If you want to optimize,
+  # another way to do it is to tag the views you need to restyle in your stylesheet,
+  # then only reapply the tagged views. For example:
+  #   def logo(st)
+  #     st.frame = {t: 10, w: 200, h: 96}
+  #     st.centered = :horizontal
+  #     st.image = image.resource('logo')
+  #     st.tag(:reapply_style)
+  #   end
+  #
+  # Then in will_animate_rotate
+  #   find(:reapply_style).reapply_styles
+
+  # Remove the following if you're only using portrait
+  def will_animate_rotate(orientation, duration)
+    reapply_styles
+  end
+end

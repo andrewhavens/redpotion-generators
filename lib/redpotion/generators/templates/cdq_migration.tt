@@ -1,0 +1,10 @@
+schema "<%= new_schema_number %> Create <%= model_name.camelize %>" do
+<%- if previous_schema_content -%>
+<%= previous_schema_content %>
+<%- end -%>
+  entity "<%= model_name.camelize %>" do
+    <%- model_attributes.each do |attr, type| -%>
+    <%= type %> :<%= attr %>
+    <%- end -%>
+  end
+end

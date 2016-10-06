@@ -1,0 +1,24 @@
+class <%= model_name.singularize.camelize %>DetailScreenStylesheet < ApplicationStylesheet
+  # Add your view stylesheets here. You can then override styles if needed,
+  # example: include FooStylesheet
+
+  def setup
+    # Add stylesheet specific setup stuff here.
+    # Add application specific setup stuff in application_stylesheet.rb
+  end
+
+  def root_view(st)
+    st.background_color = color.white
+  end
+  <%- model_attributes.each_with_index do |key_value, index| %>
+  <%- attr, type = key_value -%>
+  def <%= attr %>(st)
+    <%- if index == 0 -%>
+    nav_bar_height = 64 # First element is below the nav bar
+    st.frame = { t: nav_bar_height, w: :full, h: 44, padding: 10 }
+    <%- else -%>
+    st.frame = { bp: 0, w: :full, h: 44, padding: 10 }
+    <%- end -%>
+  end
+  <%- end -%>
+end

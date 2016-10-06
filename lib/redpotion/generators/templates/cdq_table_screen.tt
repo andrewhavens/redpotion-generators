@@ -1,0 +1,58 @@
+class <%= model_name.pluralize.camelize %>Screen < PM::TableScreen
+  title "<%= model_name.pluralize.titleize %>"
+  stylesheet <%= model_name.pluralize.camelize %>ScreenStylesheet
+
+  def on_load
+    set_nav_bar_button :right, title: "New", action: :new_<%= model_name.singularize %>
+  end
+
+  def new_<%= model_name.singularize %>
+    open New<%= model_name.singularize.camelize %>Screen
+  end
+
+  def on_return(args = {})
+    update_table_data if args[:todo]
+  end
+
+  def table_data
+    [{
+      cells: <%= model_name.singularize.camelize %>.all.map do |<%= model_name.singularize %>|
+        # For full list of options, refer to (insert ProMotion docs link here)
+        {
+          title: "<%= model_name.titleize %> ##{<%= model_name.singularize %>.id}",
+          # subtitle: "Optional Subtitle",
+          action: :show_<%= model_name.singularize %>,
+          arguments: { <%= model_name.singularize %>: <%= model_name.singularize %> },
+          editing_style: :delete
+        }
+      end
+    }]
+  end
+
+  def show_<%= model_name.singularize %>(args)
+    open <%= model_name.singularize.camelize %>DetailScreen.new(args)
+  end
+
+  def on_cell_deleted(cell, index_path)
+    cell[:arguments][:<%= model_name.singularize %>].destroy
+    app.data.save
+  end
+
+  # You don't have to reapply styles to all UIViews. If you want to optimize,
+  # another way to do it is to tag the views you need to restyle in your stylesheet,
+  # then only reapply the tagged views. For example:
+  #   def logo(st)
+  #     st.frame = {t: 10, w: 200, h: 96}
+  #     st.centered = :horizontal
+  #     st.image = image.resource('logo')
+  #     st.tag(:reapply_style)
+  #   end
+  #
+  # Then in will_animate_rotate
+  #   find(:reapply_style).reapply_styles
+
+  # Remove the following if you're only using portrait
+  def will_animate_rotate(orientation, duration)
+    reapply_styles
+  end
+end
