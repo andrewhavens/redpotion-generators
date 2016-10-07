@@ -1,4 +1,4 @@
-class <%= model_name.singularize.camelize %>Stylesheet < ApplicationStylesheet
+class <%= model_name.pluralize.camelize %>ScreenStylesheet < ApplicationStylesheet
   # Add your view stylesheets here. You can then override styles if needed,
   # example: include FooStylesheet
 
